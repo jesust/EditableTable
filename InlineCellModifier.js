@@ -36,7 +36,7 @@ class EditableTable {
      * Configura los event listeners para las celdas editables.
      */
     setupEventListeners() {
-        this.table.addEventListener("dblclick", this.handleTableDblClick.bind(this));
+        this.table.addEventListener("dblclick", (event) => this.handleTableDblClick(event));
     }
 
     /**
@@ -135,8 +135,8 @@ class EditableTable {
      * @param {HTMLElement} cell - Celda a la que se le eliminarán los listeners.
      */
     removeCellListeners(cell) {
-        cell.removeEventListener("dblclick", this.handleTableDblClick.bind(this));
-        cell.removeEventListener("keydown", this.handleCellKeydown.bind(this));
+        cell.removeEventListener("dblclick", (event) => this.handleTableDblClick(event));
+        cell.removeEventListener("keydown", (event) => this.handleCellKeydown(event));
     }
 
     /**
