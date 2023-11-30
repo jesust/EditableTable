@@ -23,6 +23,7 @@ class EditableTable {
         }
     }
 
+
     detectMobileDevice() {
         const userAgent = window.navigator.userAgent.toLowerCase();
         const mobileKeywords = ["iphone", "ipod", "android", "blackberry", "windows phone"];
@@ -267,9 +268,22 @@ class EditableTable {
      */
     performAction(columnIndex, modifiedValue) {
         if (this.onEditCallback && typeof this.onEditCallback === "function") {
-            this.onEditCallback(columnIndex, modifiedValue);
+            // Obtén la fila completa como un arreglo de valores
+            const rowValues = this.getRowValues(this.selected.parentNode);
+            this.onEditCallback(columnIndex, modifiedValue, rowValues);
         }
     }
+
+    /**
+     * Obtiene los valores de una fila como un arreglo.
+     * @param {HTMLTableRowElement} row - Fila HTML.
+     * @returns {Array} - Arreglo de valores de la fila.
+     */
+    getRowValues(row) {
+        const cells = Array.from(row.cells);
+        return cells.map(cell => cell.innerText);
+    }
+
 }
 
 // Ejemplo de uso:
@@ -277,13 +291,15 @@ const editableTable1 = new EditableTable("#table1", {
     1: { type: "number" },
     4: { type: "number" },
     5: { type: "number" },
-}, (columnIndex, value) => {
+}, (columnIndex, value, rowValues) => {
     console.log(`Modified value in column ${columnIndex}: ${value}`);
+    console.log("All values in the row:", rowValues);
 });
 
 const editableTable2 = new EditableTable("#table2", {
     2: { type: "text" },
     3: { type: "number" },
-}, (columnIndex, value) => {
+}, (columnIndex, value, rowValues) => {
     console.log(`Modified value in column ${columnIndex}: ${value}`);
+    console.log("All values in the row:", rowValues);
 });
