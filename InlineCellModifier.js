@@ -146,29 +146,43 @@ class EditableTable {
     close(commit) {
         if (this.selected) {
             if (!commit) {
-                this.selected.innerText = this.value;
+                this.restoreOriginalValue();
             } else {
-                const modifiedValue = this.selected.innerText;
-                const columnIndex = this.selected.cellIndex + 1;
-                const parsedValue = this.validateAndParse(modifiedValue, columnIndex);
-
-                if (parsedValue !== false) {
-                    this.selected.innerText = parsedValue;
-                    this.performAction(columnIndex, parsedValue);
-                } else {
-                    this.selected.innerText = this.value;
-                }
+                this.applyModifiedValue();
             }
 
-            this.restoreCellListeners(this.selected);
-
-            this.selected.contentEditable = false;
-            window.removeEventListener("mousedown", this.close.bind(this));
-            this.selected.classList.remove("edit");
-
-            this.selected = null;
-            this.value = "";
+            this.cleanupAfterEditing();
         }
+    }
+
+    /**
+     * Aplica el valor modificado a la celda y realiza la acción correspondiente.
+     */
+    applyModifiedValue() {
+        const modifiedValue = this.selected.innerText;
+        const columnIndex = this.selected.cellIndex + 1;
+        const parsedValue = this.validateAndParse(modifiedValue, columnIndex);
+
+        if (parsedValue !== false) {
+            this.selected.innerText = parsedValue;
+            this.performAction(columnIndex, parsedValue);
+        } else {
+            this.selected.innerText = this.value;
+        }
+    }
+
+    /**
+     * Limpia después de finalizar la edición.
+     */
+    cleanupAfterEditing() {
+        this.restoreCellListeners(this.selected);
+
+        this.selected.contentEditable = false;
+        window.removeEventListener("mousedown", this.close.bind(this));
+        this.selected.classList.remove("edit");
+
+        this.selected = null;
+        this.value = "";
     }
 
     /**
