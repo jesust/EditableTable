@@ -1,6 +1,6 @@
-class InlineCellModifier {
+class EditableTable {
     /**
-     * Constructor de la clase InlineCellModifier.
+     * Constructor de la clase EditableTable.
      * @param {string} tableSelector - Selector CSS de la tabla.
      * @param {Object} columnSettings - Configuración de las columnas editables.
      * @param {Function} onEditCallback - Función de devolución de llamada cuando se realiza una edición.
@@ -271,38 +271,90 @@ class InlineCellModifier {
             // Obtén la fila completa como un arreglo de valores
             const originalValue = this.value;
             const rowValues = this.getRowValues(this.selected.parentNode);
-            this.onEditCallback(columnIndex, modifiedValue, originalValue,  rowValues);
+            this.onEditCallback(columnIndex, modifiedValue, originalValue, rowValues);
         }
     }
 
     /**
      * Obtiene los valores de una fila como un arreglo.
      * @param {HTMLTableRowElement} row - Fila HTML.
-     * @returns {Array} - Arreglo de valores de la fila.
+     * @returns {Array} - Arreglo de valores de la fila con un índice de renglón al principio.
      */
     getRowValues(row) {
         const cells = Array.from(row.cells);
-        return cells.map(cell => cell.innerText);
+
+        // Agregar un índice de renglón al principio del arreglo
+        const rowIndex = row.rowIndex + 1; // Sumar 1 ya que los índices de fila comienzan desde 0
+        const rowValues = [rowIndex].concat(cells.map(cell => cell.innerText));
+
+        return rowValues;
     }
+
+    /**
+     * Restaura el valor original de la celda seleccionada.
+     */
+    restoreOriginalValue() {
+        if (this.selected) {
+            this.selected.innerText = this.value;
+        }
+    }
+
 
 }
 
-// Ejemplo de uso:
+class InlineCellModifier extends EditableTable {
+    // ... (resto del código)
+
+    /**
+     * Establece el valor de una celda específica.
+     * @param {number} rowIndex - Índice de la fila.
+     * @param {number} columnIndex - Índice de la columna.
+     * @param {any} newValue - Nuevo valor para la celda.
+     */
+    setCellValueAt(rowIndex, columnIndex, newValue) {
+        const row = this.table.rows[rowIndex - 1];
+        if (row) {
+            const cell = row.cells[columnIndex - 1];
+            if (cell) {
+                cell.innerText = newValue;
+            }
+        }
+    }
+}
+
+/* 
 const inlineCellModifier1 = new InlineCellModifier("#table1", {
     1: { type: "number" },
     4: { type: "number" },
     5: { type: "number" },
-}, (columnIndex, value, originalValue, rowValues) => {
-    console.log(`Modified value in column ${columnIndex}: ${value}`);
+}, (columnIndex, modifiedValue, originalValue, rowValues) => {
+    console.log(`Modified value in column ${columnIndex}: ${modifiedValue}`);
     console.log("Original value:", originalValue);
     console.log("All values in the row:", rowValues);
+
+    // Restaurar el valor original si es necesario
+    //inlineCellModifier1.restoreOriginalValue();
+});
+ */
+
+// Ejemplo de uso:
+const editableTable1 = new EditableTable("#table1", {
+    1: { type: "number" },
+    4: { type: "number" },
+    5: { type: "number" },
+}, (columnIndex, modifiedValue, rowValues, originalValue) => {
+    console.log(`Modified value in column ${columnIndex}: ${modifiedValue}`);
+    console.log("Original value:", originalValue);
+    console.log("All values in the row:", rowValues);
+
+    //editableTable1.restoreOriginalValue();
 });
 
-const inlineCellModifier2 = new InlineCellModifier("#table2", {
+const editableTable2 = new EditableTable("#table2", {
     2: { type: "text" },
     3: { type: "number" },
-}, (columnIndex, value, originalValue, rowValues) => {
-    console.log(`Modified value in column ${columnIndex}: ${value}`);
+}, (columnIndex, modifiedValue, rowValues, originalValue) => {
+    console.log(`Modified value in column ${columnIndex}: ${modifiedValue}`);
     console.log("Original value:", originalValue);
     console.log("All values in the row:", rowValues);
 });
