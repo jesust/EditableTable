@@ -11,12 +11,24 @@ class EditableTable {
         this.onEditCallback = onEditCallback;
         this.selected = null;
 
+        this.isMobile = this.detectMobileDevice();
+
         if (!this.table) {
             console.error(`Table with selector ${tableSelector} not found`);
             return;
         }
 
-        this.setupEventListeners();
+        if (!this.isMobile) {
+            this.setupEventListeners();
+        }
+    }
+
+    detectMobileDevice() {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const mobileKeywords = ["iphone", "ipod", "android", "blackberry", "windows phone"];
+
+        // Devuelve true si alguna de las palabras clave está presente en el User Agent
+        return mobileKeywords.some(keyword => userAgent.includes(keyword));
     }
 
     /**
