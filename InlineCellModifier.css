@@ -32,5 +32,5 @@
 }
 
 .editable td.edit {
-    background: #88f7ff; /* Edit mode cell style - Used by JavaScript */
+    background: #88ffc7; /* Edit mode cell style - Used by JavaScript */
 }
