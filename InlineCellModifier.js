@@ -1,6 +1,6 @@
-class EditableTable {
+class InlineCellModifier {
     /**
-     * Constructor de la clase EditableTable.
+     * Constructor de la clase InlineCellModifier.
      * @param {string} tableSelector - Selector CSS de la tabla.
      * @param {Object} columnSettings - Configuración de las columnas editables.
      * @param {Function} onEditCallback - Función de devolución de llamada cuando se realiza una edición.
@@ -269,8 +269,9 @@ class EditableTable {
     performAction(columnIndex, modifiedValue) {
         if (this.onEditCallback && typeof this.onEditCallback === "function") {
             // Obtén la fila completa como un arreglo de valores
+            const originalValue = this.value;
             const rowValues = this.getRowValues(this.selected.parentNode);
-            this.onEditCallback(columnIndex, modifiedValue, rowValues);
+            this.onEditCallback(columnIndex, modifiedValue, originalValue,  rowValues);
         }
     }
 
@@ -287,19 +288,21 @@ class EditableTable {
 }
 
 // Ejemplo de uso:
-const editableTable1 = new EditableTable("#table1", {
+const inlineCellModifier1 = new InlineCellModifier("#table1", {
     1: { type: "number" },
     4: { type: "number" },
     5: { type: "number" },
-}, (columnIndex, value, rowValues) => {
+}, (columnIndex, value, originalValue, rowValues) => {
     console.log(`Modified value in column ${columnIndex}: ${value}`);
+    console.log("Original value:", originalValue);
     console.log("All values in the row:", rowValues);
 });
 
-const editableTable2 = new EditableTable("#table2", {
+const inlineCellModifier2 = new InlineCellModifier("#table2", {
     2: { type: "text" },
     3: { type: "number" },
-}, (columnIndex, value, rowValues) => {
+}, (columnIndex, value, originalValue, rowValues) => {
     console.log(`Modified value in column ${columnIndex}: ${value}`);
+    console.log("Original value:", originalValue);
     console.log("All values in the row:", rowValues);
 });
