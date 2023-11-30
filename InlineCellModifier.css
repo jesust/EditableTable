@@ -1,10 +1,17 @@
-/* (A) ENTIRE PAGE */
+/* Pagina entera */
 * {
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
 }
 
-/* (B) EDITABLE TABLE */
+/* 
+   Tabla editable
+   Los estilo en esta seccion son utilizados InlineCellModifier.js
+
+   Tenga cuidado al modificar para garantizar la compatibilidad con la lógica
+   de JavaScript asociada.
+*/
+
 .editable {
     border-collapse: collapse;
 }
@@ -17,13 +24,13 @@
 
 .editable thead {
     color: #fff;
-    background: #8363fd;
+    background: #8363fd; /* Header style - Used by JavaScript */
 }
 
 .editable tbody tr:nth-child(even) {
-    background: #f2f2f2;
+    background: #f2f2f2; /* Even row style - Used by JavaScript */
 }
 
 .editable td.edit {
-    background: #f8ff88;
+    background: #88f7ff; /* Edit mode cell style - Used by JavaScript */
 }
