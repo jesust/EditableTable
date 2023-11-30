@@ -23,6 +23,28 @@ class EditableTable {
         }
     }
 
+    sendDataToServer(columnIndex, modifiedValue, ajaxCallback, originalValue, rowValues) {
+        // Usa la función de AJAX proporcionada o una implementación predeterminada
+        if (typeof ajaxCallback === "function") {
+            ajaxCallback(columnIndex, modifiedValue, originalValue, rowValues);
+        } else {
+            // Implementación predeterminada de AJAX
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "tu_script_php.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log(xhr.responseText);
+                }
+            };
+
+            // Construir datos a enviar
+            const data = `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}`;
+            xhr.send(data);
+        }
+    }
 
     detectMobileDevice() {
         const userAgent = window.navigator.userAgent.toLowerCase();
