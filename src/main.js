@@ -1,4 +1,13 @@
+import DeviceDetector from "./modules/DeviceDetector/DeviceDetector.js";
+import EditableTable from "./modules/EditableTable/EditableTable.js";  
+import InlineCellModifier from "./modules/EditableTable/InlineCellModifier.js";
+
+
+
+
 /* 
+
+
 const inlineCellModifier1 = new InlineCellModifier("#table1", {
     1: { type: "number" },
     4: { type: "number" },
@@ -26,10 +35,7 @@ const editableTable2 = new EditableTable("#table2", {
 /** */
 
 
-// Ejemplo de uso con función de AJAX personalizada
 const customAjaxCallback = (columnIndex, modifiedValue, originalValue, rowValues) => {
-    // Lógica personalizada para enviar datos al servidor
-    // Puedes usar Fetch API u otras bibliotecas AJAX aquí
     fetch("tu_script_personalizado.php", {
         method: "POST",
         headers: {
@@ -37,15 +43,16 @@ const customAjaxCallback = (columnIndex, modifiedValue, originalValue, rowValues
         },
         body: `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}&originalValue=${originalValue}&rowValues=${JSON.stringify(rowValues)}`,
     })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            // Manejar la respuesta del servidor si es necesario
             console.log(data);
         })
         .catch(error => {
             console.error("Error:", error);
         });
 };
+
+
 
 // Instancia de EditableTable con función de AJAX personalizada
 const editableTable1 = new EditableTable("#table1", {
@@ -58,7 +65,9 @@ const editableTable1 = new EditableTable("#table1", {
     console.log("All values in the row:", rowValues);
 
     // Llamada a la función de AJAX personalizada con originalValue y rowValues
-    editableTable1.sendDataToServer(columnIndex, modifiedValue, customAjaxCallback, originalValue, rowValues);
+    editableTable1.sendDataToServer(columnIndex, modifiedValue, originalValue, rowValues, customAjaxCallback);
+
+    // editableTable1.restoreOriginalValue();
 });
 
 

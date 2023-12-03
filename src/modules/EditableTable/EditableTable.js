@@ -11,7 +11,7 @@ class EditableTable {
         this.onEditCallback = onEditCallback;
         this.selected = null;
 
-        this.isMobile = this.detectMobileDevice();
+        this.isMobile = DeviceDetector.detectMobileDevice();
 
         if (!this.table) {
             console.error(`Table with selector ${tableSelector} not found`);
@@ -23,28 +23,54 @@ class EditableTable {
         }
     }
 
-    sendDataToServer(columnIndex, modifiedValue, ajaxCallback, originalValue, rowValues) {
-        // Usa la función de AJAX proporcionada o una implementación predeterminada
-        if (typeof ajaxCallback === "function") {
-            ajaxCallback(columnIndex, modifiedValue, originalValue, rowValues);
-        } else {
-            // Implementación predeterminada de AJAX
-            const xhr = new XMLHttpRequest();
-            xhr.open("POST", "tu_script_php.php", true);
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+/**
+ * Envia datos al servidor para su procesamiento, ya sea utilizando una función de AJAX proporcionada o la implementación predeterminada.
+ * @param {number} columnIndex - Índice de la columna modificada.
+ * @param {any} modifiedValue - Valor modificado en la celda.
+ * @param {any} originalValue - Valor original antes de la modificación.
+ * @param {Array} rowValues - Valores de toda la fila afectada.
+ * @param {Function} ajaxCallback - Función de devolución de llamada personalizada para manejar el envío de datos al servidor. 
+ *                                 Debe aceptar parámetros: columnIndex, modifiedValue, originalValue, rowValues.
+ */
+sendDataToServer(columnIndex, modifiedValue, originalValue, rowValues, ajaxCallback) {
+    // Usa la función de AJAX proporcionada si está definida
+    if (typeof ajaxCallback === "function") {
+        ajaxCallback(columnIndex, modifiedValue, originalValue, rowValues);
+    } else {
+        // Implementación predeterminada de AJAX
+        const xhr = new XMLHttpRequest();
+        
+        // Configurar la solicitud AJAX
+        xhr.open("POST", "tu_script_personalizado.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // Manejar la respuesta del servidor si es necesario
-                    console.log(xhr.responseText);
-                }
-            };
+        // Manejar cambios en el estado de la solicitud
+        xhr.onreadystatechange = function () {
+            // Comprobar si la solicitud se completó y fue exitosa (estado 4 y código 200)
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Manejar la respuesta del servidor si es necesario
+                console.log(xhr.responseText);
+            }
+        };
 
-            // Construir datos a enviar
-            const data = `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}`;
-            xhr.send(data);
+        // Construir datos a enviar en el cuerpo de la solicitud
+        const data = `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}`;
+        xhr.send(data);
+    }
+}
+
+
+    /**
+     * Restaura el valor original de la celda seleccionada.
+     */
+    restoreOriginalValue() {
+        if (this.selected) {
+            this.selected.innerText = this.value;
         }
     }
+
+
+    /** metodos privados */
 
     detectMobileDevice() {
         const userAgent = window.navigator.userAgent.toLowerCase();
@@ -326,13 +352,6 @@ class EditableTable {
         return rowValues;
     }
 
-    /**
-     * Restaura el valor original de la celda seleccionada.
-     */
-    restoreOriginalValue() {
-        if (this.selected) {
-            this.selected.innerText = this.value;
-        }
-    }
-
 }
+
+export default EditableTable;

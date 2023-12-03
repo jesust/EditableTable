@@ -18,3 +18,4 @@ class InlineCellModifier extends EditableTable {
     }
 }
 
+export default InlineCellModifier;
