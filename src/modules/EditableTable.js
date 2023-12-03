@@ -354,10 +354,20 @@ class EditableTable {
 
 }
 
+// Definición de la clase DeviceDetector
 class DeviceDetector {
+    /**
+     * Método estático para detectar si el dispositivo es móvil.
+     * @returns {boolean} - true si el dispositivo es móvil, false si no lo es.
+     */
     static detectMobileDevice() {
+        // Obtiene la cadena del User Agent del navegador y la convierte a minúsculas
         const userAgent = window.navigator.userAgent.toLowerCase();
+        
+        // Palabras clave que indican dispositivos móviles
         const mobileKeywords = ["iphone", "ipod", "android", "blackberry", "windows phone"];
+        
+        // Comprueba si alguna de las palabras clave está presente en la cadena del User Agent
         return mobileKeywords.some(keyword => userAgent.includes(keyword));
     }
 }
