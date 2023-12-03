@@ -23,41 +23,41 @@ class EditableTable {
         }
     }
 
-/**
- * Envia datos al servidor para su procesamiento, ya sea utilizando una función de AJAX proporcionada o la implementación predeterminada.
- * @param {number} columnIndex - Índice de la columna modificada.
- * @param {any} modifiedValue - Valor modificado en la celda.
- * @param {any} originalValue - Valor original antes de la modificación.
- * @param {Array} rowValues - Valores de toda la fila afectada.
- * @param {Function} ajaxCallback - Función de devolución de llamada personalizada para manejar el envío de datos al servidor. 
- *                                 Debe aceptar parámetros: columnIndex, modifiedValue, originalValue, rowValues.
- */
-sendDataToServer(columnIndex, modifiedValue, originalValue, rowValues, ajaxCallback) {
-    // Usa la función de AJAX proporcionada si está definida
-    if (typeof ajaxCallback === "function") {
-        ajaxCallback(columnIndex, modifiedValue, originalValue, rowValues);
-    } else {
-        // Implementación predeterminada de AJAX
-        const xhr = new XMLHttpRequest();
-        
-        // Configurar la solicitud AJAX
-        xhr.open("POST", "tu_script_personalizado.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    /**
+     * Envia datos al servidor para su procesamiento, ya sea utilizando una función de AJAX proporcionada o la implementación predeterminada.
+     * @param {number} columnIndex - Índice de la columna modificada.
+     * @param {any} modifiedValue - Valor modificado en la celda.
+     * @param {any} originalValue - Valor original antes de la modificación.
+     * @param {Array} rowValues - Valores de toda la fila afectada.
+     * @param {Function} ajaxCallback - Función de devolución de llamada personalizada para manejar el envío de datos al servidor. 
+     *                                 Debe aceptar parámetros: columnIndex, modifiedValue, originalValue, rowValues.
+     */
+    sendDataToServer(columnIndex, modifiedValue, originalValue, rowValues, ajaxCallback) {
+        // Usa la función de AJAX proporcionada si está definida
+        if (typeof ajaxCallback === "function") {
+            ajaxCallback(columnIndex, modifiedValue, originalValue, rowValues);
+        } else {
+            // Implementación predeterminada de AJAX
+            const xhr = new XMLHttpRequest();
 
-        // Manejar cambios en el estado de la solicitud
-        xhr.onreadystatechange = function () {
-            // Comprobar si la solicitud se completó y fue exitosa (estado 4 y código 200)
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Manejar la respuesta del servidor si es necesario
-                console.log(xhr.responseText);
-            }
-        };
+            // Configurar la solicitud AJAX
+            xhr.open("POST", "tu_script_personalizado.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        // Construir datos a enviar en el cuerpo de la solicitud
-        const data = `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}`;
-        xhr.send(data);
+            // Manejar cambios en el estado de la solicitud
+            xhr.onreadystatechange = function () {
+                // Comprobar si la solicitud se completó y fue exitosa (estado 4 y código 200)
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Manejar la respuesta del servidor si es necesario
+                    console.log(xhr.responseText);
+                }
+            };
+
+            // Construir datos a enviar en el cuerpo de la solicitud
+            const data = `columnIndex=${columnIndex}&modifiedValue=${modifiedValue}`;
+            xhr.send(data);
+        }
     }
-}
 
 
     /**
@@ -353,5 +353,33 @@ sendDataToServer(columnIndex, modifiedValue, originalValue, rowValues, ajaxCallb
     }
 
 }
+
+class DeviceDetector {
+    static detectMobileDevice() {
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const mobileKeywords = ["iphone", "ipod", "android", "blackberry", "windows phone"];
+        return mobileKeywords.some(keyword => userAgent.includes(keyword));
+    }
+}
+
+class InlineCellModifier extends EditableTable {
+
+    /**
+     * Establece el valor de una celda específica.
+     * @param {number} rowIndex - Índice de la fila.
+     * @param {number} columnIndex - Índice de la columna.
+     * @param {any} newValue - Nuevo valor para la celda.
+     */
+    setCellValueAt(rowIndex, columnIndex, newValue) {
+        const row = this.table.rows[rowIndex - 1];
+        if (row) {
+            const cell = row.cells[columnIndex - 1];
+            if (cell) {
+                cell.innerText = newValue;
+            }
+        }
+    }
+}
+
 
 export default EditableTable;
