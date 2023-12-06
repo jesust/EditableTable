@@ -1,6 +1,6 @@
 // main.js
 
-import EditableTable from "./modules/EditableTable.js";  
+import EditableTable from "../src/EditableTable.js";  
 
 
 /* 
