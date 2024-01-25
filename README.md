@@ -13,7 +13,7 @@ Este proyecto proporciona una implementación en JavaScript para la edición de 
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/TU_USUARIO/TU_REPOSITORIO.git
+   git clone https://github.com/jesust/EditableTable.git
    ```
 
 2. Abre el archivo index.html en tu navegador para probar la funcionalidad de la tabla editable.
