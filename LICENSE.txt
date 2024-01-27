@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2024 erpbsg.com <hola@erpbsg.com>
+Copyright (c) 2024 J Jesus Terrazas A & erpbsg.com <hola@erpbsg.com>
 
 All rights reserved.
 
